@@ -2,7 +2,8 @@ package winput
 
 import (
 	"unsafe"
-	"win-float/pkg/win32"
+
+	"github.com/janmir/go-win32"
 )
 
 const (
