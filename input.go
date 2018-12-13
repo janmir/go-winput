@@ -78,8 +78,8 @@ var (
 	inputKSize uintptr
 )
 
-//XInputWord Handles windows input
-type XInputWord struct {
+//Input Handles windows input
+type Input struct {
 	win win32.Win32
 	kbd win32.HKL
 }
@@ -89,8 +89,8 @@ func init() {
 }
 
 //New creates a new Input structure
-func New() XInputWord {
-	x := XInputWord{}
+func New() Input {
+	x := Input{}
 	w := win32.New()
 
 	//retrievs the active keyboard for the locale
@@ -101,7 +101,7 @@ func New() XInputWord {
 }
 
 //HotKey keyboard shortcut keys
-func (i XInputWord) HotKey(hot int) bool {
+func (i Input) HotKey(hot int) bool {
 	var (
 		inputs   = make([]win32.KEYBD_INPUT, 2)
 		key      rune
@@ -158,7 +158,7 @@ func (i XInputWord) HotKey(hot int) bool {
 }
 
 //Type loads all characters of the string one-by-one
-func (i XInputWord) Type(word string) bool {
+func (i Input) Type(word string) bool {
 	inputs := make([]win32.KEYBD_INPUT, 0)
 
 	//load characters as inputs
@@ -178,7 +178,7 @@ func (i XInputWord) Type(word string) bool {
 }
 
 //press press key up and then down
-func (i XInputWord) press(inputs []win32.KEYBD_INPUT) bool {
+func (i Input) press(inputs []win32.KEYBD_INPUT) bool {
 	inputLen := len(inputs)
 	count := -1
 	if inputLen > 0 {
@@ -189,17 +189,17 @@ func (i XInputWord) press(inputs []win32.KEYBD_INPUT) bool {
 }
 
 //KeyDown press key up and then down
-func (i XInputWord) KeyDown(vcode, mod int) []win32.KEYBD_INPUT {
+func (i Input) KeyDown(vcode, mod int) []win32.KEYBD_INPUT {
 	return i.input(vcode, mod, win32.KEYEVENTF_KEYDOWN)
 }
 
 //KeyUp press key up and then down
-func (i XInputWord) KeyUp(vcode, mod int) []win32.KEYBD_INPUT {
+func (i Input) KeyUp(vcode, mod int) []win32.KEYBD_INPUT {
 	return i.input(vcode, mod, win32.KEYEVENTF_KEYUP)
 }
 
 //input input keys
-func (i XInputWord) input(key, mod, event int) []win32.KEYBD_INPUT {
+func (i Input) input(key, mod, event int) []win32.KEYBD_INPUT {
 	var press win32.KEYBDINPUT
 	inputs := make([]win32.KEYBD_INPUT, 0)
 
@@ -254,7 +254,7 @@ func (i XInputWord) input(key, mod, event int) []win32.KEYBD_INPUT {
 
 //getVKey translate a character rune to its win virtual keycode
 //and shift state
-func (i XInputWord) getVKey(key rune) (int, int) {
+func (i Input) getVKey(key rune) (int, int) {
 	mod, vcode := i.win.VkKeyScanEx(key, i.kbd)
 
 	switch mod {
